@@ -3,6 +3,10 @@
 
 import { defineConfig } from '#q-app/wrappers';
 
+import { fsdFix } from './config';
+
+import path from 'node:path';
+
 export default defineConfig((/* ctx */) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -11,10 +15,10 @@ export default defineConfig((/* ctx */) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios'],
+    boot: ['~/src/app/boot/axios'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
-    css: ['app.scss'],
+    css: ['~/src/app/css/app.scss'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -32,6 +36,14 @@ export default defineConfig((/* ctx */) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
+      alias: {
+        App: path.join(__dirname, './src/app'),
+        Entities: path.join(__dirname, './src/entities'),
+        Features: path.join(__dirname, './src/features'),
+        Pages: path.join(__dirname, './src/pages'),
+        Shared: path.join(__dirname, './src/shared'),
+        Widgets: path.join(__dirname, './src/widgets'),
+      },
       target: {
         browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],
         node: 'node20',
@@ -43,7 +55,7 @@ export default defineConfig((/* ctx */) => {
         // extendTsConfig (tsConfig) {}
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -61,7 +73,9 @@ export default defineConfig((/* ctx */) => {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-
+      extendViteConf() {
+        fsdFix();
+      },
       vitePlugins: [
         [
           'vite-plugin-checker',
@@ -74,6 +88,7 @@ export default defineConfig((/* ctx */) => {
           },
           { server: false },
         ],
+        ['vite-plugin-vue-devtools', {}],
       ],
     },
 
@@ -81,6 +96,7 @@ export default defineConfig((/* ctx */) => {
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
+      port: 3000,
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
@@ -117,6 +133,11 @@ export default defineConfig((/* ctx */) => {
     //   electronPreload: 'src-electron/electron-preload'
     //   bexManifestFile: 'src-bex/manifest.json
     // },
+    sourceFiles: {
+      rootComponent: 'src/app/App.vue',
+      router: 'src/app/router',
+      store: 'src/app/stores',
+    },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {
