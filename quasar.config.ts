@@ -77,6 +77,7 @@ export default defineConfig((/* ctx */) => {
         fsdFix();
       },
       vitePlugins: [
+        ['vite-plugin-vue-devtools', {}],
         [
           'vite-plugin-checker',
           {
@@ -88,7 +89,6 @@ export default defineConfig((/* ctx */) => {
           },
           { server: false },
         ],
-        ['vite-plugin-vue-devtools', {}],
       ],
     },
 
@@ -96,7 +96,6 @@ export default defineConfig((/* ctx */) => {
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
-      port: 3000,
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
@@ -135,8 +134,8 @@ export default defineConfig((/* ctx */) => {
     // },
     sourceFiles: {
       rootComponent: 'src/app/App.vue',
-      router: 'src/app/router',
-      store: 'src/app/stores',
+      router: 'src/app/router/index',
+      store: 'src/app/stores/index',
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
